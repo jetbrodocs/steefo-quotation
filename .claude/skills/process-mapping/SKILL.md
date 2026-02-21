@@ -1,3 +1,8 @@
+---
+name: process-mapping
+description: Use when creating or editing process documentation in the 20-process-maps/ folder — organizes observations into sequential, followable process flows with decision points and exception paths.
+---
+
 # Process Mapping
 
 ## When to Use

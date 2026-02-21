@@ -1,3 +1,8 @@
+---
+name: solution-design
+description: Use when creating or editing files in the 40-solution-design/ folder — bridges documented processes to digital system design by extracting requirements, defining data models, and recording technology decisions.
+---
+
 # Solution Design
 
 ## When to Use

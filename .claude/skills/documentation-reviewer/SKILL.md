@@ -1,3 +1,8 @@
+---
+name: documentation-reviewer
+description: Use when asked to review, audit, check, or perform a gap analysis on documentation — covers reviewing individual files, entire folders, or cross-referencing multiple documents for consistency.
+---
+
 # Documentation Reviewer
 
 ## When to Use

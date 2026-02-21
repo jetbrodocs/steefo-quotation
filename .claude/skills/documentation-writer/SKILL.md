@@ -1,3 +1,8 @@
+---
+name: documentation-writer
+description: Use whenever writing, drafting, or editing any documentation file — the baseline writing standard for all documentation output including observations, process maps, analysis documents, and solution designs.
+---
+
 # Documentation Writer
 
 ## When to Use

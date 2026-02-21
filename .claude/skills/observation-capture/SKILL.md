@@ -1,3 +1,8 @@
+---
+name: observation-capture
+description: Use when creating or editing observation files in the 10-observations/ folder — captures raw site visit data with the six required elements (activity, inputs, outputs, people, timing, problems).
+---
+
 # Observation Capture
 
 ## When to Use
