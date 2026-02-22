@@ -1,6 +1,6 @@
 ---
 title: "Gap Analysis: Current vs Proposed Quotation Process"
-status: draft
+status: approved
 created: 2026-02-21
 updated: 2026-02-21
 tags: [analysis, gap-analysis, requirements]
@@ -166,7 +166,4 @@ Derived from the gaps and analysis above. Ranked by priority.
 | # | Question | Answer |
 |---|---|---|
 | 1 | Letterhead on system-generated pages? | Replicate Steefo's letterhead design in system templates. Full control. Item content PDFs are stitched as-is with page number overlay on top. |
-
-## Open Questions
-
-1. For the Scope of Supply table, should each catalog item define its own default scope rows at upload time, or should there be a master scope template that adapts based on selection? **Awaiting input from Steefo.**
+| 2 | Scope of Supply table: per-item rows or master template? | Each catalog item defines its own scope of supply rows. When a builder selects an item, its scope rows auto-populate in the table. The super admin sets default S/C values per row when uploading the item. |
