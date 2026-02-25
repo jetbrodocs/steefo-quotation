@@ -2,7 +2,7 @@
 title: "PRD: Steefo Quotation Preparation Tool"
 status: draft
 created: 2026-02-21
-updated: 2026-02-22
+updated: 2026-02-25
 tags: [solution-design, prd, quotation]
 ---
 
@@ -49,12 +49,12 @@ Flow:
                                         |
                                QUOTATION_VERSION_CREATED (new version from locked)
 
-  Exclusion Template Management
-      [ADMIN]
-         |
-  EXCLUSION_TEMPLATE_CREATED
-         |
-  EXCLUSION_TEMPLATE_UPDATED
+  Exclusion Template Management     Default Content Management
+      [ADMIN]                            [ADMIN]
+         |                                  |
+  EXCLUSION_TEMPLATE_CREATED      DEFAULT_INTRODUCTION_UPDATED
+         |                                  |
+  EXCLUSION_TEMPLATE_UPDATED      DEFAULT_TERMS_UPDATED
          |
   EXCLUSION_TEMPLATE_DEACTIVATED
          |
@@ -72,6 +72,8 @@ Flow:
 | Catalog Item | `CatalogItem` | Has many Scope Row Templates. Referenced by Quotation Versions (via item selections). |
 | Scope Row Template | (embedded in CatalogItem payload) | Belongs to a Catalog Item. Defines default S/C values for one row in the Scope of Supply table. |
 | Exclusion Template | `ExclusionTemplate` | Referenced by Quotation Versions (via exclusion selections). Standalone reusable clause. |
+| Default Introduction | `DefaultIntroduction` | Single-record entity. Provides the default introduction text pre-filled into new quotation versions. |
+| Default Terms | `DefaultTerms` | Single-record entity. Provides the default terms and conditions text pre-filled into new quotation versions. |
 | Quotation | `Quotation` | Has many Quotation Versions. Top-level container for project code and QTN code. |
 | Quotation Version | `QuotationVersion` | Belongs to a Quotation. Contains all content: front page fields, production table, item selections, scope overrides, terms, exclusions. Has a lifecycle (draft -> locked -> sent). |
 
@@ -81,6 +83,11 @@ Flow:
 - **C** = Customer — the customer is responsible for this scope item.
 
 These abbreviations are used throughout the Scope of Supply table columns.
+
+### Conventions
+
+- **`created_at` fields** are not included in event payloads. Projection services derive `created_at` from the event's `occurred_at` timestamp when inserting new rows. This is a platform-wide convention.
+- **`updated_at` fields** follow the same pattern — derived from `occurred_at` on update events.
 
 ### Entity Field Definitions
 
@@ -111,6 +118,28 @@ These abbreviations are used throughout the Scope of Supply table columns.
 | status | string | `active` or `inactive` |
 | created_at | datetime | When the template was created |
 
+#### Default Introduction
+
+| Field | Type | Description |
+|---|---|---|
+| id | UUID | Primary key (single record — always the same ID) |
+| content | text | The default introduction text pre-filled into new quotation versions |
+| updated_at | datetime | When the content was last updated |
+
+Note: Single-record entity. The system creates one record during initial setup. The admin updates it as needed. There is no create/delete lifecycle — only updates.
+
+#### Default Terms
+
+| Field | Type | Description |
+|---|---|---|
+| id | UUID | Primary key (single record — always the same ID) |
+| content | text | The default terms and conditions text pre-filled into new quotation versions |
+| updated_at | datetime | When the content was last updated |
+
+Note: Same pattern as Default Introduction. Single record, update only.
+
+**Seeding note for both Default entities:** The developer inserts the initial records via database migration or seed script during deployment. There is no CREATE event — the event trail begins from the first admin update. This is acceptable because the initial content is developer-provided placeholder text that the admin will review and update before first use.
+
 #### Quotation
 
 | Field | Type | Description |
@@ -132,7 +161,7 @@ These abbreviations are used throughout the Scope of Supply table columns.
 | version_number | integer | Sequential version number (1, 2, 3...) |
 | status | string | `draft`, `locked`, or `sent` |
 | date | date | Quotation date displayed on the document |
-| introduction_text | text | Editable introduction content (page 1). Pre-filled with default. |
+| introduction_text | text | Editable introduction content (page 1). Pre-filled from Default Introduction master. |
 | mill_production | string | Technical parameter field (e.g., "25 to 30 Tons / Hr.") |
 | basic_raw_material | string | Technical parameter field (e.g., "Billets 100 & 130 mm") |
 | finished_products | string | Technical parameter field (e.g., "8 mm to 32mm High Strength TMT Re Bars") |
@@ -140,8 +169,8 @@ These abbreviations are used throughout the Scope of Supply table columns.
 | production_table_file_url | string | URL/path to the uploaded Excel file |
 | production_table_data | jsonb | Parsed production table data for PDF rendering |
 | selected_item_ids | jsonb | Array of CatalogItem UUIDs in display order |
-| scope_rows | jsonb | Array of scope rows with per-version S/C overrides. Each row: `{sr_no, description, qty, basic_data, basic_design, detailed_design, supply, supervision_of_erection, erection_and_comm, supervision_of_comm, source_item_id}`. Initialized from item scope_row_templates when items are selected. Builder can toggle values. |
-| terms_content | text | Editable terms and conditions content (pages 72-74). Pre-filled with default. |
+| scope_rows | jsonb | Array of scope rows with per-version overrides. Each row: `{sr_no, description, qty, basic_data, basic_design, detailed_design, supply, supervision_of_erection, erection_and_comm, supervision_of_comm, source_item_id}`. Initialized from item scope_row_templates when items are selected. Builder can toggle S/C values and edit qty. Description is read-only (inherited from catalog). |
+| terms_content | text | Editable terms and conditions content (pages 72-74). Pre-filled from Default Terms master. |
 | selected_exclusion_ids | jsonb | Array of ExclusionTemplate UUIDs selected for this version |
 | custom_exclusions | jsonb | Array of custom exclusion strings written by the builder |
 | locked_at | datetime | When the version was locked (null if draft) |
@@ -465,6 +494,76 @@ Permissions:
 
 ---
 
+### Step: Update Default Introduction
+
+Event type: `DEFAULT_INTRODUCTION_UPDATED`
+
+Trigger:
+  Super admin navigates to the Default Content screen, edits the
+  introduction text, and clicks "Save".
+
+Data points captured:
+  - content: text -- the updated default introduction text
+
+Payload:
+  id: UUID (fixed single-record ID)
+  content: text
+
+Aggregate: DefaultIntroduction / id
+
+Location: None
+
+Preconditions:
+  - Actor must have super admin role
+
+Side effects:
+  - Default introduction projection updated
+  - All future quotations will use the new default text
+  - Existing quotation versions (draft or locked) are unaffected
+
+Projections updated:
+  - default_introduction: content -> new text, updated_at -> now
+
+Permissions:
+  - events:DEFAULT_INTRODUCTION_UPDATED:emit
+
+---
+
+### Step: Update Default Terms
+
+Event type: `DEFAULT_TERMS_UPDATED`
+
+Trigger:
+  Super admin navigates to the Default Content screen, edits the
+  terms and conditions text, and clicks "Save".
+
+Data points captured:
+  - content: text -- the updated default terms and conditions text
+
+Payload:
+  id: UUID (fixed single-record ID)
+  content: text
+
+Aggregate: DefaultTerms / id
+
+Location: None
+
+Preconditions:
+  - Actor must have super admin role
+
+Side effects:
+  - Default terms projection updated
+  - All future quotations will use the new default text
+  - Existing quotation versions (draft or locked) are unaffected
+
+Projections updated:
+  - default_terms: content -> new text, updated_at -> now
+
+Permissions:
+  - events:DEFAULT_TERMS_UPDATED:emit
+
+---
+
 ### Step: Create Quotation
 
 Event type: `QUOTATION_CREATED`
@@ -485,9 +584,10 @@ Payload:
   qtn_code: string
   version_id: UUID (generated for V1)
   version_number: 1
+  version_code: string (e.g., "P480-QTN569-V1")
   date: date
-  introduction_text: string (system default)
-  terms_content: string (system default)
+  introduction_text: string (from DefaultIntroduction master)
+  terms_content: string (from DefaultTerms master)
 
 Aggregate: Quotation / id
 
@@ -499,13 +599,14 @@ Preconditions:
 
 Side effects:
   - Quotation record created
-  - QuotationVersion V1 created in draft status with default content pre-filled
+  - QuotationVersion V1 created in draft status with content pre-filled from DefaultIntroduction and DefaultTerms masters
   - Quotation's latest_version_number set to 1
   - Quotation's latest_version_id set to the new version ID
+  - System also emits a cascading QUOTATION_VERSION_CREATED event against the QuotationVersion aggregate (version_id) so that V1's creation appears in the QuotationVersion event stream, keeping version history queries consistent with V2+
 
 Projections updated:
   - quotations: new row (id, project_code, qtn_code, latest_version_number: 1, latest_version_id)
-  - quotation_versions: new row (id, version_code: "{project_code}-{qtn_code}-V1", quotation_id, version_number: 1, status: "draft", date, introduction_text: default, terms_content: default, all other content fields: null/empty)
+  - quotation_versions: new row (id, version_code, quotation_id, version_number: 1, status: "draft", date, introduction_text: from DefaultIntroduction, terms_content: from DefaultTerms, all other content fields: null/empty)
 
 Permissions:
   - events:QUOTATION_CREATED:emit
@@ -595,6 +696,8 @@ Side effects:
   - System generates the final PDF with continuous page numbering (Page X of Y)
   - PDF includes: introduction page, technical parameters page, basic data page, production table page (if uploaded), selected equipment item PDFs (stitched as-is with page number overlay), scope of supply table, terms and conditions pages, exclusions page
   - Equipment item PDFs are fetched from the catalog at lock time (current version, not snapshotted at selection time)
+  - Exclusion template text is fetched from the exclusion_templates projection at lock time (same pattern as catalog items — live reference, not snapshot)
+  - PDF file is named `{project_code}-{qtn_code}-V{N}.pdf` (e.g., `P480-QTN569-V1.pdf`)
   - PDF stored and URL recorded in locked_pdf_url
   - Version becomes read-only
 
@@ -737,6 +840,10 @@ Transitions:
 Notes:
 - Same pattern as Catalog Item. Deactivation and reactivation are reversible.
 
+### Default Introduction and Default Terms (no state machine)
+
+These are single-record entities with no lifecycle. They exist from system setup onward. The only operation is update. No create, delete, activate, or deactivate transitions.
+
 ### Quotation (no state machine)
 
 The Quotation entity does not have its own lifecycle status. Its display status is derived from its latest QuotationVersion's status. If the latest version is draft, the quotation appears as "draft" in the list. If locked, it appears as "locked". If sent, "sent".
@@ -780,15 +887,16 @@ Notes:
 |---|---|---|---|---|
 | 1 | "What equipment items are in the catalog?" | catalog_items | id, item_code, name, category, status, display_order | CATALOG_ITEM_CREATED, CATALOG_ITEM_UPDATED, CATALOG_ITEM_DEACTIVATED, CATALOG_ITEM_REACTIVATED |
 | 2 | "What exclusion templates are available?" | exclusion_templates | id, template_code, text, status, display_order | EXCLUSION_TEMPLATE_CREATED, EXCLUSION_TEMPLATE_UPDATED, EXCLUSION_TEMPLATE_DEACTIVATED, EXCLUSION_TEMPLATE_REACTIVATED |
-| 3 | "What quotations exist and what is their status?" | quotations (joined with quotation_versions) | project_code, qtn_code, latest version status, latest_version_number | QUOTATION_CREATED, QUOTATION_VERSION_CREATED, QUOTATION_VERSION_LOCKED, QUOTATION_VERSION_SENT |
-| 4 | "What are all versions of a specific quotation?" | quotation_versions | version_code, version_number, status, locked_at, sent_at | QUOTATION_CREATED, QUOTATION_VERSION_CREATED, QUOTATION_VERSION_LOCKED, QUOTATION_VERSION_SENT |
-| 5 | "Show me the full content of a quotation version" | quotation_versions | All content fields (introduction, technical params, selected items, scope rows, terms, exclusions) | QUOTATION_CREATED, QUOTATION_VERSION_UPDATED, QUOTATION_VERSION_CREATED |
-| 6 | "What is the history of changes to a quotation version?" | movement_events (direct query) | event_type, payload, actor_id, occurred_at filtered by aggregate_type=QuotationVersion | Automatic (all events stored) |
-| 7 | "What is the history of a catalog item?" | movement_events (direct query) | event_type, payload, actor_id, occurred_at filtered by aggregate_type=CatalogItem | Automatic (all events stored) |
+| 3 | "What are the current default introduction and terms?" | default_introduction, default_terms | content, updated_at | DEFAULT_INTRODUCTION_UPDATED, DEFAULT_TERMS_UPDATED |
+| 4 | "What quotations exist and what is their status?" | quotations (joined with quotation_versions) | project_code, qtn_code, latest version status, latest_version_number | QUOTATION_CREATED, QUOTATION_VERSION_CREATED, QUOTATION_VERSION_LOCKED, QUOTATION_VERSION_SENT |
+| 5 | "What are all versions of a specific quotation?" | quotation_versions | version_code, version_number, status, locked_at, sent_at | QUOTATION_CREATED, QUOTATION_VERSION_CREATED, QUOTATION_VERSION_LOCKED, QUOTATION_VERSION_SENT |
+| 6 | "Show me the full content of a quotation version" | quotation_versions | All content fields (introduction, technical params, selected items, scope rows, terms, exclusions) | QUOTATION_CREATED, QUOTATION_VERSION_UPDATED, QUOTATION_VERSION_CREATED |
+| 7 | "What is the history of changes to a quotation version?" | movement_events (direct query) | event_type, payload, actor_id, occurred_at filtered by aggregate_type=QuotationVersion | Automatic (all events stored) |
+| 8 | "What is the history of a catalog item?" | movement_events (direct query) | event_type, payload, actor_id, occurred_at filtered by aggregate_type=CatalogItem | Automatic (all events stored) |
 
 Notes:
-- Reports 6 and 7 are free -- they query the event store directly by aggregate_type and aggregate_id.
-- Report 3 (quotation list/dashboard) is the primary landing page. It needs to show: project code, QTN code, latest version number, latest version status. Filterable by status (draft, locked, sent).
+- Reports 7 and 8 are free -- they query the event store directly by aggregate_type and aggregate_id.
+- Report 4 (quotation list/dashboard) is the primary landing page. It needs to show: project code, QTN code, latest version number, latest version status. Filterable by status (draft, locked, sent).
 - No pagination concerns. Volume is low: 1-5 quotations per month, ~20 catalog items, ~10-15 exclusion templates.
 
 ---
@@ -814,6 +922,8 @@ Notes:
 | events:EXCLUSION_TEMPLATE_UPDATED:emit | Edit exclusion templates | Update Exclusion Template | Super Admin |
 | events:EXCLUSION_TEMPLATE_DEACTIVATED:emit | Deactivate exclusion templates | Deactivate Exclusion Template | Super Admin |
 | events:EXCLUSION_TEMPLATE_REACTIVATED:emit | Reactivate exclusion templates | Reactivate Exclusion Template | Super Admin |
+| events:DEFAULT_INTRODUCTION_UPDATED:emit | Edit default introduction text | Update Default Introduction | Super Admin |
+| events:DEFAULT_TERMS_UPDATED:emit | Edit default terms and conditions text | Update Default Terms | Super Admin |
 | events:QUOTATION_CREATED:emit | Create new quotations | Create Quotation | Super Admin, Quotation Builder |
 | events:QUOTATION_VERSION_UPDATED:emit | Edit draft quotation versions | Update Quotation Version | Super Admin, Quotation Builder |
 | events:QUOTATION_VERSION_LOCKED:emit | Lock a quotation version | Lock Quotation Version | Super Admin, Quotation Builder |
@@ -832,7 +942,22 @@ This process does not involve physical locations. Events will not carry a `locat
 
 ---
 
-## 8. Screen List
+## 8. Non-Functional Requirements
+
+Source: `30-analysis/001-gap-analysis.md`, Non-Functional Requirements section.
+
+| # | Requirement | Constraint | Notes |
+|---|---|---|---|
+| NF1 | Simple UI | Big buttons, minimal text input, clear labels | Users have basic computer skills. Avoid dense forms. |
+| NF2 | Web-based | Accessible from any device with a modern browser | 2-3 concurrent users. No native app. |
+| NF3 | PDF format fidelity | Output must match Steefo's existing technical offer format | Continuous page numbering, Steefo letterhead, header with REF NO. / DATE / Page X of Y. |
+| NF4 | Document size | Handle final PDFs up to 200 pages | Affects PDF generation memory and processing time. Largest offers are 100-200 pages. |
+| NF5 | PDF upload size | Support equipment item PDFs up to ~10 pages each | Typical item is 5-6 pages. ~20 items in the catalog. |
+| NF6 | Security | Login required, no public access | All data is confidential. Role-based access per Section 6. |
+
+---
+
+## 9. Screen List
 
 ### Super Admin Screens
 
@@ -846,41 +971,43 @@ This process does not involve physical locations. Events will not carry a `locat
 | 6 | Exclusion Template Form | form | Super Admin | Add or edit an exclusion template | Save, Cancel |
 | 7 | User Management List | list | Super Admin | Browse all users | Add User |
 | 8 | User Form | form | Super Admin | Add or edit a user, assign role | Save, Cancel |
+| 9 | Default Content | form | Super Admin | Edit the default introduction text and default terms & conditions text that pre-fill new quotations. Two sections on one page. | Save Introduction, Save Terms |
 
 ### Quotation Builder Screens
 
 | # | Screen Name | Type | Used By | Purpose | Key Actions |
 |---|---|---|---|---|---|
-| 9 | Quotation List | list | Super Admin, Builder | Browse all quotations with status filter (draft, locked, sent). Shows project code, QTN code, latest version, status. | New Quotation |
-| 10 | New Quotation Form | form | Super Admin, Builder | Enter project code, QTN code, date to create a new quotation | Create |
-| 11 | Quotation Version Editor | form | Super Admin, Builder | The main workspace. Tabbed or sectioned interface for editing all content of a draft version. Sections below. | Save, Preview PDF, Lock Version |
-| 11a | -- Introduction Section | (tab/section) | | Edit introduction text. Pre-filled with defaults. Header (REF NO., DATE, Page X of Y) is system-generated from project code, QTN code, date, and page numbers — not editable. | Save |
-| 11b | -- Technical Parameters Section | (tab/section) | | Edit mill production, basic raw material, finished products fields. | Save |
-| 11c | -- Basic Data Section | (tab/section) | | Edit power requirement field. | Save |
-| 11d | -- Production Table Section | (tab/section) | | Upload Excel file. Preview converted table. Re-upload if needed. | Upload, Save |
-| 11e | -- Equipment Selection Section | (tab/section) | | Checkbox list of active catalog items. Check/uncheck to include. Shows item name, category, page count. | Save |
-| 11f | -- Scope of Supply Section | (tab/section) | | Editable grid. Rows auto-populated from selected items. 7 S/C toggle columns per row. Builder clicks cells to flip S to C or C to S. | Save |
-| 11g | -- Terms & Conditions Section | (tab/section) | | Rich text editor with pre-filled default content. Builder modifies as needed. | Save |
-| 11h | -- Exclusions Section | (tab/section) | | Checkbox list of active exclusion templates. Plus text area for custom exclusions. | Save |
-| 12 | PDF Preview | detail | Super Admin, Builder | Full rendered PDF preview in browser. Exact output with continuous page numbering. | Back to Editor, Lock Version |
-| 13 | Quotation Version Detail | detail | Super Admin, Builder | View locked/sent version. Shows all content read-only. Version history list. | Download PDF, Mark as Sent, Create New Version |
-| 14 | Version History | list | Super Admin, Builder | All versions of a quotation with status, dates, download links | Select Version |
+| 10 | Quotation List | list | Super Admin, Builder | Browse all quotations with status filter (draft, locked, sent). Shows project code, QTN code, latest version, status. | New Quotation |
+| 11 | New Quotation Form | form | Super Admin, Builder | Enter project code, QTN code, date to create a new quotation | Create |
+| 12 | Quotation Version Editor | form | Super Admin, Builder | The main workspace. Tabbed or sectioned interface for editing all content of a draft version. Sections below. | Save, Preview PDF, Lock Version |
+| 12a | -- Introduction Section | (tab/section) | | Edit introduction text. Pre-filled from Default Introduction master. Header (REF NO., DATE, Page X of Y) is system-generated from project code, QTN code, date, and page numbers — not editable. | Save |
+| 12b | -- Technical Parameters Section | (tab/section) | | Edit mill production, basic raw material, finished products fields. | Save |
+| 12c | -- Basic Data Section | (tab/section) | | Edit power requirement field. | Save |
+| 12d | -- Production Table Section | (tab/section) | | Upload Excel file. Preview converted table. Re-upload if needed. | Upload, Save |
+| 12e | -- Equipment Selection Section | (tab/section) | | Checkbox list of active catalog items. Check/uncheck to include. Shows item name, category, page count. | Save |
+| 12f | -- Scope of Supply Section | (tab/section) | | Editable grid. Rows auto-populated from selected items. 7 S/C toggle columns per row (clickable toggles). Qty column is editable. Description column is read-only (from catalog). | Save |
+| 12g | -- Terms & Conditions Section | (tab/section) | | Rich text editor pre-filled from Default Terms master. Builder modifies as needed. | Save |
+| 12h | -- Exclusions Section | (tab/section) | | Checkbox list of active exclusion templates with full clause text shown next to each checkbox. Plus text area for custom exclusions. | Save |
+| 13 | PDF Preview | detail | Super Admin, Builder | Full rendered PDF preview in browser. Exact output with continuous page numbering. | Back to Editor, Lock Version |
+| 14 | Quotation Version Detail | detail | Super Admin, Builder | View locked/sent version. Shows all content read-only. Version history list. | Download PDF, Mark as Sent, Create New Version |
+| 15 | Version History | list | Super Admin, Builder | All versions of a quotation with status, dates, download links | Select Version |
 
-Total: 14 screens (8 admin + 6 builder, with the editor having 8 sub-sections).
+Total: 15 screens (9 admin + 6 builder, with the editor having 8 sub-sections).
 
 Notes on screen actions:
 - Screens 3 and 5 show "Deactivate" when item/template is active, "Reactivate" when inactive. Only one action visible at a time based on current status.
 
 ### Screen Notes
 
-- **Screen 11 (Quotation Version Editor)** is the most complex screen. Vertical tabs on the left side, ordered top to bottom matching the document page order. Builder clicks any tab freely. Selected tab's content appears in the main content area to the right. Builder can save any section independently.
-- **Screen 11f (Scope of Supply)** is the most data-dense component: 60+ rows with 7 togglable columns each plus description and quantity columns. Build as a compact grid. S/C cells should be clickable toggles (tap to flip).
-- **Screen 12 (PDF Preview)** renders the exact final PDF in the browser. The builder uses this to verify before locking. Must show continuous page numbering.
+- **Screen 9 (Default Content)** is a simple form with two rich text editors — one for the introduction, one for terms & conditions. Each has its own Save button. When the admin saves, it fires the corresponding event (DEFAULT_INTRODUCTION_UPDATED or DEFAULT_TERMS_UPDATED). The developer seeds the initial content during setup.
+- **Screen 12 (Quotation Version Editor)** is the most complex screen. Vertical tabs on the left side, ordered top to bottom matching the document page order. Builder clicks any tab freely. Selected tab's content appears in the main content area to the right. Builder can save any section independently.
+- **Screen 12f (Scope of Supply)** is the most data-dense component: 60+ rows with 7 togglable columns each, plus a read-only description column and an editable quantity column. Build as a compact grid. S/C cells should be clickable toggles (tap to flip).
+- **Screen 13 (PDF Preview)** renders the exact final PDF in the browser. The builder uses this to verify before locking. Must show continuous page numbering.
 - **User Management (screens 7-8)** uses the platform's existing user management UI patterns. Super Admin creates users and assigns roles (Super Admin or Quotation Builder).
 
 ---
 
-## 9. Process Flowchart
+## 10. Process Flowchart
 
 ### Catalog Management Flow
 
@@ -936,6 +1063,7 @@ flowchart LR
         A1["Manage Catalog Items"]
         A2["Manage Exclusion Templates"]
         A3["Manage Users"]
+        A4["Manage Default Content"]
     end
 
     subgraph Builder
@@ -953,6 +1081,7 @@ flowchart LR
 
     A1 -->|"Items available"| B4
     A2 -->|"Templates available"| B7
+    A4 -->|"Defaults pre-filled"| B1
     B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> B9 --> B10
 ```
 
@@ -962,4 +1091,4 @@ flowchart LR
 
 1. ~~Editor layout~~ **Resolved.** Vertical tabs on the left side, ordered top to bottom matching document page order: Introduction → Technical Parameters → Basic Data → Production Table → Equipment Selection → Scope of Supply → Terms & Conditions → Exclusions. Builder clicks tabs freely. Each tab shows one section in the main content area to the right.
 2. ~~Catalog item updates in drafts~~ **Resolved.** Use the latest active PDF at lock time. Drafts always reference the current catalog. When the builder locks a version, the system uses whatever PDF is in the catalog at that moment. No snapshotting at selection time.
-3. Excel-to-table conversion: exact format specification depends on the sample Excel file from Steefo. **Awaiting sample file.** The production table section (screen 11d) and the QUOTATION_VERSION_UPDATED payload's `production_table_data` field will need refinement once the format is known.
+3. Excel-to-table conversion: exact format specification depends on the sample Excel file from Steefo. **Awaiting sample file.** The production table section (screen 12d) and the QUOTATION_VERSION_UPDATED payload's `production_table_data` field will need refinement once the format is known.

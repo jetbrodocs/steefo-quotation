@@ -2,7 +2,7 @@
 title: "User Journeys: Steefo Quotation Preparation Tool"
 status: draft
 created: 2026-02-21
-updated: 2026-02-22
+updated: 2026-02-25
 tags: [solution-design, user-journeys, quotation]
 ---
 
@@ -16,7 +16,7 @@ Companion document to `001-quotation-tool-prd.md`.
 
 ### Who they are
 
-Suril Agarwal is the owner of Steefo Engineering Corporation. He manages the equipment catalog, user accounts, and exclusion templates. He also builds quotations himself.
+Suril Agarwal is the owner of Steefo Engineering Corporation. He manages the equipment catalog, exclusion templates, default content (introduction and terms), and user accounts. He also builds quotations himself.
 
 ### Their typical workflow
 
@@ -55,6 +55,15 @@ Suril Agarwal is the owner of Steefo Engineering Corporation. He manages the equ
 3. He repeats for each standard exclusion clause. After 5 minutes, 9 templates exist.
 4. Builders can now pick from these when assembling quotations.
 
+**Managing default content (one-time setup, then updated as needed)**
+
+1. Suril navigates to Default Content from the menu.
+2. He sees two sections: Introduction and Terms & Conditions.
+3. In the Introduction section, he pastes Steefo's standard introduction paragraph — the same text that appears on page 1 of every technical offer. He clicks "Save Introduction".
+4. In the Terms & Conditions section, he pastes the standard terms text — preferred makes of boughtout items, scope of services, facilities to implement project. He clicks "Save Terms".
+5. From now on, every new quotation will be pre-filled with this text. Builders can still edit it per-quotation.
+6. Six months later, Steefo updates their standard terms to include a new payment clause. Suril returns to Default Content, edits the Terms section, and saves. New quotations pick up the updated text. Existing drafts and locked versions are unaffected.
+
 **Adding a new user**
 
 1. A new staff member joins and needs to prepare quotations.
@@ -64,7 +73,7 @@ Suril Agarwal is the owner of Steefo Engineering Corporation. He manages the equ
 
 ### What success looks like
 
-The catalog has all current equipment items with accurate PDFs and scope rows. Exclusion templates cover the standard clauses. When a builder creates a quotation, every item they need is available in the catalog. Suril only touches the catalog when equipment specs change or a new item is designed.
+The catalog has all current equipment items with accurate PDFs and scope rows. Exclusion templates cover the standard clauses. Default introduction and terms are set up so new quotations start pre-filled. When a builder creates a quotation, every item they need is available in the catalog. Suril only touches the admin screens when equipment specs change, a new item is designed, or the standard text needs updating.
 
 ---
 
@@ -89,7 +98,7 @@ Ramesh is one of 2-3 staff members at Steefo who prepare technical offers. He ha
 
 **Editing the front pages (5 minutes)**
 
-6. The Introduction section is pre-filled with Steefo's standard introduction text. Ramesh reads it. No changes needed for this project. He moves to the next section.
+6. The Introduction section is pre-filled with text from the Default Introduction master. Ramesh reads it. No changes needed for this project. He moves to the next section.
 7. In Technical Parameters, he fills in:
    - Mill Production: "25 to 30 Tons / Hr."
    - Basic Raw Material: "Billets 100 & 130 mm"
@@ -135,7 +144,7 @@ Ramesh is one of 2-3 staff members at Steefo who prepare technical offers. He ha
 
 **Editing terms and conditions (3 minutes)**
 
-22. Ramesh navigates to the Terms & Conditions section. The system shows pre-filled default content: preferred makes of boughtout items, scope of services, facilities to implement project.
+22. Ramesh navigates to the Terms & Conditions section. The system shows content pre-filled from the Default Terms master: preferred makes of boughtout items, scope of services, facilities to implement project.
 23. He reviews. The high voltage specification needs to change from 30 KV to 33 KV for this project. He edits that line.
 24. He clicks "Save".
 

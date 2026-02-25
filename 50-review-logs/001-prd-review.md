@@ -2,7 +2,7 @@
 title: "Review Log — PRD and User Journeys"
 status: approved
 created: 2026-02-22
-updated: 2026-02-22
+updated: 2026-02-25
 reviewer: Claude
 tags: [review]
 ---
@@ -19,7 +19,9 @@ Reviewed `40-solution-design/001-quotation-tool-prd.md` and `40-solution-design/
 
 ## Summary
 
-The PRD covers all 9 required sections from the PRD guide. All 13 event types have complete step definitions (11 original + 2 reactivation events added during review). The user journeys are concrete and cover both roles. Cross-referencing found 1 high-severity gap (missing data model fields), 7 medium-severity items (mostly clarifications needed from Steefo), and 5 low-severity items (terminology, minor inconsistencies). All gaps have been resolved or accepted.
+**Review 1 (2026-02-22):** Found 1 high, 7 medium, 5 low gaps. All resolved.
+
+**Review 2 (2026-02-25):** After adding Default Introduction and Default Terms masters, re-reviewed the full PRD (now 10 sections, 15 event types, 15 screens, 8 reports). Found 0 high, 4 medium, 6 low new issues. All resolved. PRD guide checklist passes fully. All 16 MVP functional requirements and 6 non-functional requirements are covered.
 
 ## Gaps Found
 
@@ -62,7 +64,50 @@ The PRD covers all 9 required sections from the PRD guide. All 13 event types ha
 - **G7:** Page count estimates left as rough approximations. Exact counts will vary by quotation.
 - **G10:** S/C abbreviation definition added to PRD Section 2.
 - **G11:** Capitalization inconsistency noted. Not blocking — will standardize during implementation.
-- **G13:** NF4/NF5 constraints not formalized in PRD. Documented in gap analysis NF section, sufficient for implementation reference.
+- **G13:** Now resolved — NFR section added to PRD in Review 2.
+
+---
+
+## Review 2 — 2026-02-25
+
+### Context
+
+PRD was updated to add Default Introduction and Default Terms master entities. Full second review pass performed.
+
+### New Gaps Found
+
+| # | File | Section | Gap | Severity | Resolution |
+|---|---|---|---|---|---|
+| G14 | PRD | Missing section | No NFR section. Gap analysis NF1-NF6 not formalized in the PRD. | Medium | Added Section 8 (Non-Functional Requirements) with all 6 NFRs. |
+| G15 | PRD | Section 3, QUOTATION_CREATED | V1 creation event stored against Quotation aggregate, not QuotationVersion. Report 7 (version history) would be incomplete for V1. | Medium | Added cascading QUOTATION_VERSION_CREATED event for V1 in QUOTATION_CREATED side effects. |
+| G16 | PRD | Section 3, QUOTATION_VERSION_LOCKED | Exclusion template text fetching behavior undocumented. Text fetched at lock time (live) but not stated. | Medium | Added explicit note to lock step: exclusion text fetched at lock time, same as catalog item PDFs. |
+| G17 | PRD | Section 2, scope_rows / Screen 12f | Scope of Supply qty and description column editability unspecified. | Medium | Resolved: qty editable, description read-only. Updated field definition and screen description. |
+| G18 | PRD | Section 2 | `created_at` fields not in any event payload. Convention not documented. | Low | Added Conventions note: `created_at` derived from event `occurred_at`. |
+| G19 | PRD | Section 3, QUOTATION_CREATED | `version_code` not in payload, but present in QUOTATION_VERSION_CREATED. Inconsistency. | Low | Added `version_code` to QUOTATION_CREATED payload. |
+| G20 | PRD | Section 3, QUOTATION_VERSION_LOCKED | PDF file naming convention not documented. | Low | Added: `{project_code}-{qtn_code}-V{N}.pdf`. |
+| G21 | PRD | Section 2 | Default content entities have no CREATE event. Initial data seeded by developer. | Low | Accepted. Added seeding note. Direct database seed is fine; event trail begins from first admin update. |
+| G22 | PRD | Screen 10 | Quotation date not shown on list screen. | Low | Accepted. Date visible when opening the quotation. List shows project code, QTN code, version, status. |
+| G23 | PRD | Screen 10, Screen 1 | No search/filter beyond status filters on list screens. | Low | Accepted. Volume too low (~20 items, 1-5 quotations/month) to justify search. |
+
+### Changes Made (Review 2)
+
+#### PRD (`001-quotation-tool-prd.md`)
+
+19. Added Section 8 (Non-Functional Requirements) with 6 NFRs from gap analysis. Renumbered Screen List to Section 9, Process Flowchart to Section 10. (G14)
+20. Added cascading QUOTATION_VERSION_CREATED event for V1 in QUOTATION_CREATED side effects. (G15)
+21. Added exclusion text lock-time fetching note to QUOTATION_VERSION_LOCKED side effects. (G16)
+22. Updated scope_rows field description: qty editable, description read-only. (G17)
+23. Updated Screen 12f description: qty editable, description read-only. (G17)
+24. Updated Screen 12h description: show full clause text next to checkboxes. (G16)
+25. Added Conventions note in Section 2: `created_at` and `updated_at` derived from event `occurred_at`. (G18)
+26. Added `version_code` to QUOTATION_CREATED payload. (G19)
+27. Added PDF file naming convention to QUOTATION_VERSION_LOCKED side effects. (G20)
+28. Added seeding note for Default Introduction and Default Terms entities. (G21)
+29. Updated Screen 12f screen note: read-only description column, editable quantity column. (G17)
+
+#### User Journeys (`002-user-journeys.md`)
+
+No changes needed in Review 2. User journeys already updated from default content addition.
 
 ## Changes Made
 
