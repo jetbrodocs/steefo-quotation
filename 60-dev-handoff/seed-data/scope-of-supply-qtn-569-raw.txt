@@ -1,0 +1,268 @@
+STEEFO ENGINEERING CORPORATION
+CONTINUATION SHEET NO.
+A GOVT. OF INDIA RECOGNISED STAR EXPORT HOUSE
+AHMEDABAD, INDIA Page 53 of 75
+S STEEFO
+C CUSTOMER
+SCOPE OF SUPPLY OF AUTOMATIC ROLLLING MILL
+Sr.
+Description Qty.
+No.
+ataD
+cisaB
+ngiseD
+cisaB
+deliateD
+ngiseD ylppuS
+noisivrepuS noitcerE
+fo
+&
+noitcerE .mmoC
+noisivrepuS
+.mmoC
+fo
+A MILL EQUIPMENT
+1 550 MM Heavy Duty Roughing Mill
+1.1 High Speed Flywheel 1 No. S S S S S C S
+1.2 Reduction Gear Box 2 Nos. S S S S S C S
+1.3 550mm 3 -Hi Pinion Gear Box 1 No. S S S S S C S
+1.4 Base Plate for Pinion Gear Box 2 Nos. S S S S S C S
+1.5 550mm Mill Stand 1 No. S S S S S C S
+1.6 Cardan Shaft with Universal Head 3 Set S S S S S C S
+1.7 Full Geared Heavy Duty Couplings 4 Set S S S S S C S
+1.8 Foundation Bolts 1 Set S S S S S C S
+1.9 Motor Base Plate 3 Nos. S S S S S C S
+2 400mm Continuous Intermediate Mill
+2.1 Reduction cum Pinion Gear Box 2 Nos. S S S S S C S
+2.2 400 mm Mill Stands 2 Nos. S S S S S C S
+2.3 Cardan Shafts 4 Nos. S S S S S C S
+2.4 Geared Coupling 2 Nos. S S S S S C S
+2.5 Foundation Bolts 1 Set S S S S S C S
+2.6 Motor Base Plate 8 Nos. S S S S S C S
+S S S S S C S
+3 360mm Continuous Intermediate Mill
+3.1 Reduction cum Pinion Gear Box 4 Nos. S S S S S C S
+3.2 360 mm Mill Stands 4 Nos. S S S S S C S
+3.3 Cardan Shafts 8 Nos. S S S S S C S
+3.4 Geared Coupling 4 Nos. S S S S S C S
+3.5 Foundation Bolts 1 Set S S S S S C S
+16
+3.6 Motor Base Plate S S S S S C S
+Nos.
+4 320mm Continuous Intermediate Mill
+4.1 Reduction cum Pinion Gear Box 4 Nos. S S S S S C S
+4.2 320 mm Mill Stands 4 Nos. S S S S S C S
+4.3 Cardan Shafts 8 Nos. S S S S S C S
+4.4 Geared Coupling 4 Nos. S S S S S C S
+4.5 Foundation Bolts 1 Set S S S S S C S
+16
+4.6 Motor Base Plate S S S S S C S
+Nos.
+
+STEEFO ENGINEERING CORPORATION
+CONTINUATION SHEET NO.
+A GOVT. OF INDIA RECOGNISED STAR EXPORT HOUSE
+AHMEDABAD, INDIA Page 54 of 75
+4 320mm Continuous Intermediate Mill
+4.1 Reduction cum Pinion Gear Box 4 Nos. S S S S S C S
+4.2 320 mm Mill Stands 4 Nos. S S S S S C S
+4.3 Cardan Shafts 8 Nos. S S S S S C S
+4.4 Geared Coupling 4 Nos. S S S S S C S
+4.5 Foundation Bolts 1 Set S S S S S C S
+16
+4.6 Motor Base Plate S S S S S C S
+Nos.
+5 280mm Continuous Finishing Mill.
+5.1 Reduction cum Pinion Gear Box 4 Nos. S S S S S C S
+5.2 280 mm Mill Stands 4 Nos. S S S S S C S
+5.3 Cardan Shafts 8 Nos S S S S S C S
+5.4 Geared Coupling 4 Nos. S S S S S C S
+5.5 Foundation Bolts 1 Set S S S S S C S
+16
+5.6 Motor Base Plate S S S S S C S
+Nos.
+6 Auxiliary Equipment
+Y Table for Roughing Mill to feed Top passes
+6.1 1 No. S S S S S C S
+automatic
+Fix Roller Table for Roughing Mill to feed
+6.2 1 No. S S S S S C S
+Bottom passes automatic
+Approach Roller Table to 1st Continuous Mill
+6.3 1 No. S S S S S C S
+(Extension Roller Table)
+6.4 Pinch roll Before Quenching Box 1 No. S S S S S C S
+6.5 Pinch roll after Quenching Box 1 No. S S S S S C S
+6.6 Start/ Stop type Crop & Cobble Shear 2 Nos. S S S S S C S
+6.7 Tail Breaking Pinch Rolls 2 Nos. S S S S S C S
+6.8 Roller Guide Box with Holder 1 Set S S S S S C S
+6.9 Roller Twist Guide 1 Set S S S S S C S
+6.10 Funnels 1 Set S S S S S C S
+6.11 Static Guides 1 Set S S S S S C S
+6.12 Water pump 2 Nos. S S S S S C S
+7 ELECTRICALS
+7.1 AC Motor for 550mm Roughing Mill 1 No. S S S S S C S
+7.2 D.C. Motor for 400mm Continuous Mill 2 Nos. S S S S S C S
+7.3 D.C. Motor for 360mm Continuous Mill 4 Nos. S S S S S C S
+7.4 D.C. Motor for 320mm Continuous Mill 4 Nos. S S S S S C S
+7.5 D.C. Motor for 280mm Continuous Mill 4 Nos. S S S S S C S
+Small AC Motors for Y Table, Turning Wall
+7.6 Roller table, Approach Roller table, Furnace 1 Set S S S S S C S
+Discharge Roller Table, etc.
+Main LT A.C. Incomer Panel for all AC / DC
+7.7 1 Set S S S S S C S
+Motors
+
+STEEFO ENGINEERING CORPORATION
+CONTINUATION SHEET NO.
+A GOVT. OF INDIA RECOGNISED STAR EXPORT HOUSE
+AHMEDABAD, INDIA Page 55 of 75
+D.C Drive Control Panel with Control Desk for
+7.8 7 Nos. S S S S S C S
+Shears & Pinch Rolls
+Scada base DC Drives Control Panel with Control
+14
+7.9 Desk for 400mm, 360mm, 320mm & 280mm S S S S S C S
+Nos.
+Continuous Mill
+PLC, PCs, Remote I/Os etc System for Rolling
+7.10 1 Set S S S S S C S
+Mill
+Motorised Liquid Resistance starter for 1120
+7.11 1 No. S S S S S C S
+KW Motor
+7.12 DC Motors for Shears & Pinch Roll 7 Nos. S S S S S C S
+7.13 ACB for DC Incomer 1 No. S S S S S C S
+7.14 APFC Panel 1 No. S S S S S C S
+Automatic Cooling Bed with Twin Channel &
+8 1 Set S S S S S C S
+Cold Shear -66 Mtr.
+8.1 Twin Channel 1 Set S S S S S C S
+8.2 Rack type Automatic Cooling Bed 1 Set S S S S S C S
+8.3 Run Out Roller Table 1 Set S S S S S C S
+8.4 Cold Shear 1 No. S S S S S C S
+Continuous operating dividing shear for
+9 1 No. S S S S S C S
+TMT Bars
+Bar Finishing, Bundling & Tying Machine
+10 1 No. S S S S S C S
+(Packing Bed)
+Cold Shear Run – Out Roller Table (Gauge
+10.1 1 No. S S S S S C S
+Conveyor)
+10.2 Packing Bed 1 No. S S S S S C S
+10.3 Roller Conveyor 1 No. S S S S S C S
+10.4 Semi Automatic Tying Machine 2 Nos. S S S S S C S
+11 TMT System 1 No. S S S S S C S
+11.1 Lot of Rolling Mill Thermex Pipes 1 Lot S S S S S C S
+11.2 Lot of Carriage & Pipe Fittings 1 Lot S S S S S C S
+11.3 Lot of Valves & fittings for Carriage 1 Lot S S S S S C S
+11.4 Lot of High Pressure Hose 1 Lot S S S S S C S
+11.5 Motor Control Valve 1 Lot S S S S S C S
+11.6 Pyrometers 1 Lot S S S S S C S
+11.7 Indicating Pressure Transmitter 1 Lot S S S S S C S
+11.8 Display and control system 1 Lot S S S S S C S
+11.9 Cooling Tower 1 Lot S S S S S C S
+11.10 High Pressure/Hot Water Pumps 1 Lot S S S S S C S
+12 Central Oil Lubrication System 6 Nos. S S S S S C S
+
+STEEFO ENGINEERING CORPORATION
+CONTINUATION SHEET NO.
+A GOVT. OF INDIA RECOGNISED STAR EXPORT HOUSE
+AHMEDABAD, INDIA Page 71 of 75
+3.0 Scope of supply
+S = STEEFO C = CUTSTOMER
+SCOPE OF SUPPLY OF WIRE ROD MILL
+No. Description Qty.
+ataD
+cisaB
+ngiseD
+cisaB
+deliateD ngiseD ylppuS
+fo
+noisivrepuS noitcerE
+&
+noitcerE .mmoC
+fo
+noisivrepuS /mmoC
+A Entry Pinch Roll
+Pinch Roll Mechanicals with motor base frame 1 S S S S S C S
+B Disc & Drum Shear
+Disc & Drum Mechanicals with motor base frame 1 S S S S S C S
+Crop Bucket 1 S S S S S C S
+C Side Looper
+Side Looper Mechanicals 1 S S S S S C S
+Loop Scanner 1 S S S S S C S
+D 6 stand Block mill consisting of:
+Synchro gearbox 1 S S S S S C S
+Gear couplings and floating shafts between
+1 S S S S S C S
+gearboxes & stands (set)
+Base frame for synchro gearbox 1 S S S S S C S
+Base frame for driving motors 1 S S S S S C S
+Base frame for block mill & stand supports 1 S S S S S C S
+Pipeline & fittings on stand for oil, air & hydraulic
+1 S S S S S C S
+systems (set)
+Standing Platform & Checkered plates around block
+1 S S S S S C S
+mill (set)
+Snap shear at the entry 1 S S S S S C S
+Roll stands 6 S S S S S C S
+Stand supports 6 S S S S S C S
+Bevel gearboxes 6 S S S S S C S
+Cobble box at the exit 1 S S S S S C S
+Roll Holders complete assembly 12 S S S S S C S
+SS Entry guides 6 S S S S S C S
+SS Delivery guides 6 S S S S S C S
+Roll mounting tool 1 S S S S S C S
+Roll dismounting tool 1 S S S S S C S
+Hand operated hydraulic pump for above tools 1 S S S S S C S
+
+STEEFO ENGINEERING CORPORATION
+CONTINUATION SHEET NO.
+A GOVT. OF INDIA RECOGNISED STAR EXPORT HOUSE
+AHMEDABAD, INDIA Page 72 of 75
+E Auxiliary equipment for block mill
+Circulating Oil lubrication system for gear boxes &
+1 S S S S S C S
+roll stands
+Hydraulic system for roll pre-stressing balancing 1 S S S S S C S
+Hydraulic system for roll guards operation 1 S S S S S C S
+Air oil lubrication system for guides & roll shaft
+1 S S S S S C S
+seals
+Water separator for roll stand lubrication system 1 S S S S S C S
+Emergency Tank 1 S S S S S C S
+Gauge panels in lub pit & block mill 3 S S S S S C S
+F Equipment After Block Mill
+High speed Pinch Rolls 1 S S S S S C S
+Horizontal Laying Head 1 S S S S S C S
+Pipe Bending Jig 1 S S S S S C S
+G Coil Cooling Conveyor
+Solid Roller table mechanicals 4m S S S S S C S
+Hollow Roller tables mechanicals 26m S S S S S C S
+Under structure for Coil Cooling Conveyor 30m S S S S S C S
+H Coil Handling System for Coil
+Reform Station with coil gate 1 S S S S S C S
+Roller Table 1 S S S S S C S
+Coil Up-Ender 1 S S S S S C S
+4 Arm Coil Capstan 1 S S S S S C S
+Power pack for above equipment 1 S S S S S C S
+I Auxiliaries for Wire Rod Line
+Connecting funnels between mill & WRM 1 S S S S S C S
+Foundation Bolts for all equipment (set) 1 S S S S S C S
+J Main Motors
+DC Motor for Pinch Roll 1 S S S S S C S
+AC Motors for Disc & Drum Shear 2 S S S S S C S
+DC Motors for Block Mill 1 S S S S S C S
+DC Motors for High Speed Pinch Rolls 1 S S S S S C S
+DC Motor for laying head 1 S S S S S C S
+AC Geared motors for coil cooling conveyor 4 S S S S S C S
+AC Geared motors for coil handling system 3 S S S S S C S
+K Automation & Controls
+LT Panels with drives 1 Set S S S S S C S
+Field Instrumentation - 4 nos. HMD, 2 nos.
+Pyrometers, 1 no Loop Scanners, Temperature & 1 Set S S S S S C S
+pressure transmitters
+Proximity Switches 1 Set S S S S S C S
