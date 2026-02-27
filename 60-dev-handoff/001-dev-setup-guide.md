@@ -36,6 +36,7 @@ This folder contains everything needed to seed the quotation tool with real Stee
     ├── introduction-raw.txt        ← Raw pdfplumber extraction (with headers/footers)
     ├── terms-qtn-542-raw.txt       ← Raw terms extraction from QTN-542
     ├── terms-qtn-569-raw.txt       ← Raw terms extraction from QTN-569
+    ├── production-chart-p512.xlsx   ← Sample production chart Excel (P512)
     ├── exclusions-qtn-542-raw.txt  ← Raw exclusions extraction from QTN-542
     ├── exclusions-qtn-569-raw.txt  ← Raw exclusions extraction from QTN-569
     ├── scope-of-supply-qtn-542-raw.txt  ← Raw scope table text from QTN-542
